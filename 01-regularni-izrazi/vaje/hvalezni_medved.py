@@ -1,3 +1,5 @@
+import re
+
 ###############################################################################
 # Hvaležni medved
 #
@@ -27,6 +29,15 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 ###############################################################################
 
 
+def find_words(text, substring):
+    pattern = re.compile(r'\b\w*' + substring + r'\w*\b')
+    m = re.findall(pattern, text)
+    return m
+
+
+
+
+
 ###############################################################################
 # 2) Sestavite funkcijo [find_prefix], ki vrne množico vseh besed, ki se
 #    pojavijo v nizu in imajo dano predpono.
@@ -34,6 +45,16 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 # >>> find_prefix(test_text, 'zi')
 # {'zibala', 'zibel', 'zibelko'}
 ###############################################################################
+
+def find_prefix(text, sust):
+    pattern = re.compile(r'\b' + sust + r'\w*')
+    m = re.findall(pattern, text)
+    m = list(set(m))
+    return m
+
+# print(find_prefix(test_text, 'zi'))
+
+
 
 
 ###############################################################################
@@ -43,7 +64,12 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 # >>> find_suffix(test_text, 'la')
 # {'zibala', 'razveselila', 'prestrašila', 'šivala', 'opazila', 'tla'}
 ###############################################################################
+def find_suffix(text, substring):
+    pattern = re.compile(r'\w*' + substring + r'\b')
+    m = re.findall(pattern, text)
+    return m
 
+# print(find_suffix(test_text, 'la'))
 
 ###############################################################################
 # 4) Sestavite funkcijo [double_letters], ki sprejme niz in vrne množico vseh
@@ -51,4 +77,11 @@ medved. Zvrhano zibelko sladkih hrušk mi je prinesel za en sam izdrt trn"."""
 #
 # >>> double_letters('A volunteer is worth twenty pressed men.')
 # {'volunteer', 'pressed'}
-###############################################################################
+##############################################################
+# #################
+# def double_letters(text):
+#     pattern = re.compile(r'\b\w*(?P<crka>\w)(?P=crka)\w*\b')
+#     for match in  re.finditer(pattern, text):
+#         print(match.group(0))
+
+
