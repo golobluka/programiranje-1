@@ -9,6 +9,13 @@
  - : bool = true
 [*----------------------------------------------------------------------------*)
 
+ let bst_of_list list = 
+    let rec vstavi x = function
+        | 
+    let aux drvo = function
+        | [] -> drevo
+        | glava :: rep -> aux (vstavi glava drevo) rep
+    
 
 (*----------------------------------------------------------------------------*]
  Funkcija [tree_sort] uredi seznam s pomočjo pretvorbe v bst in nato nazaj

@@ -26,8 +26,40 @@
 #     >>> a
 #     [10, 2, 0, 4, 11, 15, 17, 5, 18]
 ###############################################################################
+def zamakni(sez, stevec, razmik):
+    for i in range(razmik, 0, -1):
+        temp = sez[stevec+i]
+        sez[stevec+i] = sez[stevec+i-1]
+        sez[stevec+i-1] = temp
+    return sez
 
+def pivot(sez, minimum, maximum):
+    razmik = 1
+    stevec = minimum
+    while razmik + stevec < maximum:
+        if  sez[stevec] > sez[stevec+razmik]:
+            sez = zamakni(sez, stevec, razmik)
+            stevec += 1
 
+        else:
+            razmik += 1
+
+    return stevec
+
+ary = [4,2,7,1,3] 
+print(pivot(ary, 0 , 5))
+print(ary)
+
+# def pivot2(a, start, end):
+#     p = a[start]
+#     left = start
+#     right = end
+#     while left != right:
+#         if a[left] <= p:
+#             left += 1
+#         elif p < a[right]:
+#             right -= 1
+        
 
 ###############################################################################
 # V tabeli želimo poiskati vrednost k-tega elementa po velikosti.
@@ -44,9 +76,28 @@
 # jo rešite brez da v celoti uredite tabelo [a].
 ###############################################################################
 
+def kti_element(a, k, start = 0, stop = None):
+    if stop == None:
+        stop = len(a)
+    if k >= stop:
+        return "Indeks k izven seznama!"
+    
+    index_p = pivot(a, start, stop)
+    if index_p > k:
+        return kti_element(a, k, start, index_p)
+    elif index_p < k:
+        return kti_element(a, k, index_p+1, stop)
+    else:
+        return a[index_p] 
 
 
-###############################################################################
+
+
+# Run
+# a = [2, 3, 8, 1, 4, 0]
+# print(kti_element(a, 1))
+
+#########################################################
 # Tabelo a želimo urediti z algoritmom hitrega urejanja (quicksort).
 #
 # Napišite funkcijo [quicksort(a)], ki uredi tabelo [a] s pomočjo pivotiranja.
@@ -60,7 +111,22 @@
 #     [2, 3, 4, 5, 10, 11, 15, 17, 18]
 ###############################################################################
 
+def quicksort(a, start = 0, stop=None):
+    if stop == None:
+        stop = len(a)
+    p = pivot(a, start, stop)
+    if p - start > 1: #Če je spodnji seznam dolžine več kot ena.
+        quicksort(a, start, p)
+    if stop - (p + 1) > 1: #Če je zgornji seznam dolžine več kot ena.
+        quicksort(a, p+1, stop)
+    
 
+
+
+ary = [6, 2, 3,1, 8, 9, 0, 13]
+print(ary)
+quicksort(ary)
+print(ary)
 
 ###############################################################################
 # Če imamo dve urejeni tabeli, potem urejeno združeno tabelo dobimo tako, da
@@ -85,6 +151,26 @@
 #
 ###############################################################################
 
+def zlij(target, begin, end, list_1, list_2):
+    i1 = 0
+    i2 = 0
+    while (i1 < len(list_1)) and (i2 < len(list_2)):
+        if list_1[i1] <= list_2[i2]:
+            target[begin + i1 + i2] = list_1[i1]
+            i1 += 1
+        else:
+            target[begin + i1 + i2] = list_2[i2]
+            i2 += 1
+
+    while i1 < len(list_1):
+        target[begin + i1 + i2] = list_1[i1]
+        i1 += 1
+
+    while i2 < len(list_2):
+        target[begin + i1 + i2] = list_2[i2]
+        i2 += 1
+
+    return target
 
 
 ###############################################################################
@@ -102,3 +188,22 @@
 # >>> mergesort(a)
 # [2, 3, 4, 5, 10, 11, 15, 17, 18]
 ###############################################################################
+
+def mergesort(a, begin=0, end=None):
+    if end is None:
+        end = len(a)
+    
+    if (begin < end-1): #Preveri ali imamo seznam dolžine vsaj 2
+        midpoint = (begin+end) // 2
+        mergesort(a, begin, midpoint)
+        mergesort(a, midpoint, end)
+
+        prvi = a[begin:midpoint]
+        drugi = a[midpoint:end]
+
+        return zlij(a, begin, end, prvi, drugi)
+    else:
+        return a
+
+
+# print(mergesort([1,2,8,3,5,9,4]))

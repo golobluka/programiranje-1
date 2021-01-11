@@ -267,7 +267,77 @@ Iz definicij sledijo enačbe
 
 ### Trditev `zrcali (zrcali t) = t`
 
+Rešitev: 
+#### Bazni primer
+`zrcali(zrcali([])) = zrcali([]) = []` 
+#### Induktivni korak
+Predpostavimo, da trditev velja za poljubni dvojiški drevesi l in d.
+
+    zrcali(zrcali(Sest(l, x, d))) 
+    = zrcali(Sest(zrcali d, x, zrcali l))
+    = Sest(zrcali(zrcali(l)) , x, zrcali(zrcali(d)))
+    = (IND) Sest(l, x, d)
+
+
+
 ### Trditev `obrni xs = obrni' xs` (težja)
+
+#### Rešitev:
+Najprej z indukcijo po xs. 
+#### Bazni primer:
+` obrni [] = [] = aux [] [] = obrni' [] `
+#### Induktivni korak:
+Naj trditev velja za vse sezname dolzine n
+naj bo ys dolzine n torej ys = x :: xs za nek xs dolzine n.
+
+    
+    
+     
+    obrni (x :: xs) = 
+    obrni xs @ [x] = 
+    obrni'xs @ [x] = 
+    (aux [] xs) @ [x] = 
+    obrni(obrni((aux [] xs) @ [x])) = 
+    obrni(x :: obrni((aux [] xs))) Smo spet na začetku
+
+    Nov poizkus:
+    obrni' (x :: xs) = 
+    aux ( x :: []) xs 
+
+Dokažimo raje najprej `aux acc xs = aux ([] xs) @ acc `   (*)
+ 
+#### Bazni primer xs = [] in poljuben akumulator: 
+` aux acc [] = acc = [] @ acc = (aux [] []) @ acc` 
+
+#### Indukcijska predpostavka. Predpostavimo, da enačba velja za poljubne sezname, ki imajo dolzino manjšo kot m in poljubne acc. Naj bo ys dolzine m in acc ponovno poljuben.
+
+    aux acc ys = 
+    aux acc (x :: xs) = 
+    aux (x :: acc) xs = (IND)
+    (aux [] xs) @ (x :: acc) = 
+    (aux [] xs) @ [x] @ acc = (KOM @) (IND)
+    (aux [x] xs) @ acc = 
+    (aux [] (x :: xs)) @ acc
+
+    
+Sedaj lahko dopolnimo indukcijo iz začetka
+
+    obrni (x :: xs) = 
+    (obrni xs) @ [x] = (IND)
+    (obrni' xs) @ [x] =
+    (aux [] xs) @ [x] = (*)
+    aux [x] xs = 
+    aux [] (x :: xs) = 
+    obrni' (x :: xs)
+
+    QED
+
+
+
+
+
+
+
 
 Kot vemo, ima funkcija `obrni`, definirana kot:
 
@@ -303,3 +373,7 @@ type 'a mogoce = Nic | Nekaj of 'a
 ```
 
 Kakšni sta videti načeli indukcije za te tipe?
+
+1. Zan naravno ni drugega kot indukcija po naravnih stevilih
+2. Sploh ne pridemo do indiktivnega koraka
+3. Dokažemo za nič inizvedemo posebej indukcijo po tipu 'a
